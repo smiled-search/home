@@ -1,0 +1,463 @@
+<!doctype html>
+<html>
+<head>
+	<meta charset="utf-8">
+	<title>中国象棋</title>
+<!--公用-->
+
+	<style type="text/css">
+	*{
+		margin:0;
+		padding:0;
+		font-weight:normal;
+	}
+
+	html{
+		font-size:30px;
+		font-family:"Arial";
+	}
+
+	body{
+		padding-top:0;
+	}
+
+	#wrap{
+		position: absolute;
+		width:100%;
+		height:100%;
+		min-height:400px;
+		min-width:300px;
+		overflow:hidden;
+	}
+
+	#dish{
+		width:90%;
+		height:90%;
+		margin:0 auto;
+		top:5%;
+		position: relative;
+		left:5%;
+	}
+
+	#bg{
+		width:100%;
+		height:100%;
+		position:absolute;
+	}
+
+	.hr-x-box,.hr-y-box{
+		position: absolute;
+		width: 100%;
+		height:100%;
+	}
+
+	.hr-x{
+		position:absolute;
+		width:80%;
+		height:10%;
+		left:5%;
+		border-top:1px solid #000;
+	}
+
+	.hr-x:nth-child(1){top:5%;}
+	.hr-x:nth-child(2){top:15%;}
+	.hr-x:nth-child(3){top:25%;}
+	.hr-x:nth-child(4){top:35%;}
+	.hr-x:nth-child(5){top:45%;}
+	.hr-x:nth-child(6){top:55%;}
+	.hr-x:nth-child(7){top:65%;}
+	.hr-x:nth-child(8){top:75%;}
+	.hr-x:nth-child(9){top:85%;}
+	.hr-x:nth-child(10){top:95%;}
+	
+	.hr-y{
+		position: absolute;
+		height:90%;
+		top:5%;
+		border-left:1px solid #000;
+	}
+
+	.hr-xy{
+		width:25%;
+		height:200%;
+		position:absolute;
+		top:0;
+		left:50%;
+		margin-left:-12.5%;
+	}
+	
+	.hr-y:nth-child(1){left:5%;}
+	.hr-y:nth-child(2){left:15%;}
+	.hr-y:nth-child(3){left:25%;}
+	.hr-y:nth-child(4){left:35%;}
+	.hr-y:nth-child(5){left:45%;}
+	.hr-y:nth-child(6){left:55%;}
+	.hr-y:nth-child(7){left:65%;}
+	.hr-y:nth-child(8){left:75%;}
+	.hr-y:nth-child(9){left:85%;}
+	.hr-y:nth-child(10){left:95%;}
+
+	#bround{
+		box-sizing:border-box;
+		display:table;
+		position: absolute;
+		width:80%;
+		height:10%;
+		top:45%;
+		left:5%;
+		text-align:center;
+		font-size:1.5rem;
+		font-weight:bold;
+		background:#fff;
+		border-left:1px solid #000;
+		border-top:1px solid #000;
+	}
+
+	.border{
+		position:absolute;
+		width:90%;
+		height:100%;
+		border:4px solid #000;
+		top:-4px;
+		left:-4px;
+	}
+
+	#bround>span{
+		display:table-cell;
+		vertical-align:middle;
+	}
+
+	#dot-box{
+		position:absolute;
+		width:100%;
+		height:100%;
+		top:0px;
+		left:0px;
+	}
+
+	.dot{
+		position:absolute;
+		width:6%;
+		height:6%;
+		border-radius:50%;
+	}
+
+	.tip{
+		position:absolute;
+		width:0;
+		height:0;
+		border-width:0.8rem;
+		border-style:solid;
+		border-color:transparent;
+		border-right-width:0;
+		border-left-color:green;
+		top:25%;
+		margin-top:-0.4rem;
+		-webkit-transition: all 0.5s;
+		-o-transition: all 0.5s;
+		transition: all 0.5s;
+	}
+
+	.tip.red{
+		top:75%;
+		border-left-color:red;
+	}
+
+	.dot.show{
+		background:rgba(200,200,200,.8);
+	}
+
+	.dot-bg{
+		position:absolute;
+		top:0px;
+		left:0px;
+		width:7.2%;
+		height:7.2%;
+		display:none;
+		-webkit-transition: all 0.5s;
+		-o-transition: all 0.5s;
+		transition: all 0.5s;
+	}
+
+	.chess{
+		display:table;
+		position: absolute;
+		width:6%;
+		height:6%;
+		text-align:center;
+		font-size:1.2rem;
+		font-weight:bold;
+		top:0px;
+		left:0px;
+		cursor:pointer;
+		background:url(img/dot.gif) no-repeat;
+		background-size:100% 100%;
+		-webkit-transition: all 0.5s;
+		-o-transition: all 0.5s;
+		transition: all 0.5s;
+	}
+
+	.blue{
+		color:blue;
+	}
+
+	.red{
+		color:red;
+	}
+
+	.chess>span{
+		display:table-cell;
+		vertical-align:middle;
+	}
+
+	#start{
+		position: absolute;
+		width:100%;
+		height:100%;
+		z-index:1000;
+		font-size:1.2rem;
+		text-align:center;
+		display:table;
+		font-weight:bold;
+		background:rgba(0,0,0,.6);
+	}
+
+	.middle{
+		display:table-cell;
+		vertical-align:middle;
+	}
+
+	.second{
+		display:none;
+	}
+
+	.mybtn{
+		width:50%;
+		height:2rem;
+		line-height:2rem;
+		margin:0 auto;
+		margin-bottom:0.5rem;
+		border-radius:0.4rem;
+		cursor:pointer;
+		background:-webkit-linear-gradient(top,rgba(255,255,255,1),rgba(200,200,200,1));
+		background:-moz-linear-gradient(top,rgba(255,255,255,1),rgba(200,200,200,1));
+		background:linear-gradient(top,rgba(255,255,255,1),rgba(200,200,200,1));
+	}
+
+	.mybtn:hover{
+		background:-webkit-linear-gradient(top,rgba(200,200,200,1),rgba(255,255,255,1));
+		background:-moz-linear-gradient(top,rgba(200,200,200,1),rgba(255,255,255,1));
+		background:linear-gradient(top,rgba(200,200,200,1),rgba(255,255,255,1));
+	}
+
+	.user,.compu{
+		font-size:1.2rem;
+		text-align:center;
+		position: absolute;
+		width:100%;
+	}
+
+	.user{
+		bottom:0px;
+	}
+
+	.compu{
+		top:0px;
+	}
+	</style>
+</head>
+<body>
+	<div id="wrap">
+		<p class="compu">电脑</p>
+		<p class="user">我</p>
+		<div id="start">
+			<div class="middle">
+				<div class="first">
+					<p class="uAi mybtn">单机游戏</p>
+					<p class="cAi mybtn">双人对战</p>
+				</div>
+				<div class="second">
+					<p class="cFirst mybtn">电脑先出</p>
+					<p class="pFirst mybtn">己方先出</p>
+				</div>
+			</div>
+		</div>
+		<div id="dish">
+			<p class="tip" node-type="tip"></p>
+			<div id="bg">
+				<p class="border"></p>
+				<div class="hr-x-box">
+					<p class="hr-x">
+						<svg class="hr-xy">
+							<line x1='0' y1='0' x2='100%' y2='100%' style="stroke:rgb(0,0,0); stroke-width:1;"></line>
+							<line x1='100%' y1='0' x2='0' y2='100%' style="stroke:rgb(0,0,0); stroke-width:1;"></line>
+						</svg>
+					</p>
+					<p class="hr-x"></p>
+					<p class="hr-x"></p>
+					<p class="hr-x"></p>
+					<p class="hr-x"></p>
+					<p class="hr-x"></p>
+					<p class="hr-x"></p>
+					<p class="hr-x"></p>
+					<p class="hr-x"></p>
+					<p class="hr-x">
+						<svg class="hr-xy" style="top:-200%;">
+							<line x1='0' y1='0' x2='100%' y2='100%' style="stroke:rgb(0,0,0); stroke-width:1;"></line>
+							<line x1='100%' y1='0' x2='0' y2='100%' style="stroke:rgb(0,0,0); stroke-width:1;"></line>
+						</svg>
+					</p>
+				</div>
+				<div class="hr-y-box">
+					<p class="hr-y"></p>
+					<p class="hr-y"></p>
+					<p class="hr-y"></p>
+					<p class="hr-y"></p>
+					<p class="hr-y"></p>
+					<p class="hr-y"></p>
+					<p class="hr-y"></p>
+					<p class="hr-y"></p>
+					<p class="hr-y"></p>
+				</div>
+				<p id="bround">
+					<span>楚&nbsp;河</span><span>汉&nbsp;界</span>
+				</p>
+			</div>
+			<div id="dot-box">
+				<img src="img/active.png" class="dot-bg" node-type="dotBg" />
+				<span class="dot" style="top:2%; left:2%;"></span>
+				<span class="dot" style="top:2%; left:12%;"></span>
+				<span class="dot" style="top:2%; left:22%;"></span>
+				<span class="dot" style="top:2%; left:32%;"></span>
+				<span class="dot" style="top:2%; left:42%;"></span>
+				<span class="dot" style="top:2%; left:52%;"></span>
+				<span class="dot" style="top:2%; left:62%;"></span>
+				<span class="dot" style="top:2%; left:72%;"></span>
+				<span class="dot" style="top:2%; left:82%;"></span>
+				<span class="dot" style="top:12%; left:2%;"></span>
+				<span class="dot" style="top:12%; left:12%;"></span>
+				<span class="dot" style="top:12%; left:22%;"></span>
+				<span class="dot" style="top:12%; left:32%;"></span>
+				<span class="dot" style="top:12%; left:42%;"></span>
+				<span class="dot" style="top:12%; left:52%;"></span>
+				<span class="dot" style="top:12%; left:62%;"></span>
+				<span class="dot" style="top:12%; left:72%;"></span>
+				<span class="dot" style="top:12%; left:82%;"></span>
+				<span class="dot" style="top:22%; left:2%;"></span>
+				<span class="dot" style="top:22%; left:12%;"></span>
+				<span class="dot" style="top:22%; left:22%;"></span>
+				<span class="dot" style="top:22%; left:32%;"></span>
+				<span class="dot" style="top:22%; left:42%;"></span>
+				<span class="dot" style="top:22%; left:52%;"></span>
+				<span class="dot" style="top:22%; left:62%;"></span>
+				<span class="dot" style="top:22%; left:72%;"></span>
+				<span class="dot" style="top:22%; left:82%;"></span>
+				<span class="dot" style="top:32%; left:2%;"></span>
+				<span class="dot" style="top:32%; left:12%;"></span>
+				<span class="dot" style="top:32%; left:22%;"></span>
+				<span class="dot" style="top:32%; left:32%;"></span>
+				<span class="dot" style="top:32%; left:42%;"></span>
+				<span class="dot" style="top:32%; left:52%;"></span>
+				<span class="dot" style="top:32%; left:62%;"></span>
+				<span class="dot" style="top:32%; left:72%;"></span>
+				<span class="dot" style="top:32%; left:82%;"></span>
+				<span class="dot" style="top:42%; left:2%;"></span>
+				<span class="dot" style="top:42%; left:12%;"></span>
+				<span class="dot" style="top:42%; left:22%;"></span>
+				<span class="dot" style="top:42%; left:32%;"></span>
+				<span class="dot" style="top:42%; left:42%;"></span>
+				<span class="dot" style="top:42%; left:52%;"></span>
+				<span class="dot" style="top:42%; left:62%;"></span>
+				<span class="dot" style="top:42%; left:72%;"></span>
+				<span class="dot" style="top:42%; left:82%;"></span>
+				<span class="dot" style="top:52%; left:2%;"></span>
+				<span class="dot" style="top:52%; left:12%;"></span>
+				<span class="dot" style="top:52%; left:22%;"></span>
+				<span class="dot" style="top:52%; left:32%;"></span>
+				<span class="dot" style="top:52%; left:42%;"></span>
+				<span class="dot" style="top:52%; left:52%;"></span>
+				<span class="dot" style="top:52%; left:62%;"></span>
+				<span class="dot" style="top:52%; left:72%;"></span>
+				<span class="dot" style="top:52%; left:82%;"></span>
+				<span class="dot" style="top:62%; left:2%;"></span>
+				<span class="dot" style="top:62%; left:12%;"></span>
+				<span class="dot" style="top:62%; left:22%;"></span>
+				<span class="dot" style="top:62%; left:32%;"></span>
+				<span class="dot" style="top:62%; left:42%;"></span>
+				<span class="dot" style="top:62%; left:52%;"></span>
+				<span class="dot" style="top:62%; left:62%;"></span>
+				<span class="dot" style="top:62%; left:72%;"></span>
+				<span class="dot" style="top:62%; left:82%;"></span>
+				<span class="dot" style="top:72%; left:2%;"></span>
+				<span class="dot" style="top:72%; left:12%;"></span>
+				<span class="dot" style="top:72%; left:22%;"></span>
+				<span class="dot" style="top:72%; left:32%;"></span>
+				<span class="dot" style="top:72%; left:42%;"></span>
+				<span class="dot" style="top:72%; left:52%;"></span>
+				<span class="dot" style="top:72%; left:62%;"></span>
+				<span class="dot" style="top:72%; left:72%;"></span>
+				<span class="dot" style="top:72%; left:82%;"></span>
+				<span class="dot" style="top:82%; left:2%;"></span>
+				<span class="dot" style="top:82%; left:12%;"></span>
+				<span class="dot" style="top:82%; left:22%;"></span>
+				<span class="dot" style="top:82%; left:32%;"></span>
+				<span class="dot" style="top:82%; left:42%;"></span>
+				<span class="dot" style="top:82%; left:52%;"></span>
+				<span class="dot" style="top:82%; left:62%;"></span>
+				<span class="dot" style="top:82%; left:72%;"></span>
+				<span class="dot" style="top:82%; left:82%;"></span>
+				<span class="dot" style="top:92%; left:2%;"></span>
+				<span class="dot" style="top:92%; left:12%;"></span>
+				<span class="dot" style="top:92%; left:22%;"></span>
+				<span class="dot" style="top:92%; left:32%;"></span>
+				<span class="dot" style="top:92%; left:42%;"></span>
+				<span class="dot" style="top:92%; left:52%;"></span>
+				<span class="dot" style="top:92%; left:62%;"></span>
+				<span class="dot" style="top:92%; left:72%;"></span>
+				<span class="dot" style="top:92%; left:82%;"></span>
+				<span class="chess blue" node-type="blue" data-type="car" style="top:2%; left:2%;"><span>車</span></span>
+				<span class="chess blue" node-type="blue" data-type="horse" style="top:2%; left:12%;"><span>馬</span></span>
+				<span class="chess blue" node-type="blue" data-type="elephant" style="top:2%; left:22%;"><span>象</span></span>
+				<span class="chess blue" node-type="blue" data-type="noble" style="top:2%; left:32%;"><span>仕</span></span>
+				<span class="chess blue boss" node-type="blue" data-type="general" style="top:2%; left:42%;"><span>將</span></span>
+				<span class="chess blue" node-type="blue" data-type="noble" style="top:2%; left:52%;"><span>仕</span></span>
+				<span class="chess blue" node-type="blue" data-type="elephant" style="top:2%; left:62%;"><span>象</span></span>
+				<span class="chess blue" node-type="blue" data-type="horse" style="top:2%; left:72%;"><span>馬</span></span>
+				<span class="chess blue" node-type="blue" data-type="car" style="top:2%; left:82%;"><span>車</span></span>
+				<span class="chess blue" node-type="blue" data-type="gun" style="top:22%; left:12%;"><span>炮</span></span>
+				<span class="chess blue" node-type="blue" data-type="gun" style="top:22%; left:72%;"><span>炮</span></span>
+				<span class="chess blue" node-type="blue" data-type="ranker" style="top:32%; left:2%;"><span>卒</span></span>
+				<span class="chess blue" node-type="blue" data-type="ranker" style="top:32%; left:22%;"><span>卒</span></span>
+				<span class="chess blue" node-type="blue" data-type="ranker" style="top:32%; left:42%;"><span>卒</span></span>
+				<span class="chess blue" node-type="blue" data-type="ranker" style="top:32%; left:62%;"><span>卒</span></span>
+				<span class="chess blue" node-type="blue" data-type="ranker" style="top:32%; left:82%;"><span>卒</span></span>
+				<span class="chess red" node-type="red" data-type="ranker" style="top:62%; left:2%;"><span>卒</span></span>
+				<span class="chess red" node-type="red" data-type="ranker" style="top:62%; left:22%;"><span>卒</span></span>
+				<span class="chess red" node-type="red" data-type="ranker" style="top:62%; left:42%;"><span>卒</span></span>
+				<span class="chess red" node-type="red" data-type="ranker" style="top:62%; left:62%;"><span>卒</span></span>
+				<span class="chess red" node-type="red" data-type="ranker" style="top:62%; left:82%;"><span>卒</span></span>
+				<span class="chess red" node-type="red" data-type="gun" style="top:72%; left:12%;"><span>炮</span></span>
+				<span class="chess red" node-type="red" data-type="gun" style="top:72%; left:72%;"><span>炮</span></span>
+				<span class="chess red" node-type="red" data-type="car" style="top:92%; left:2%;"><span>車</span></span>
+				<span class="chess red" node-type="red" data-type="horse" style="top:92%; left:12%;"><span>馬</span></span>
+				<span class="chess red" node-type="red" data-type="elephant" style="top:92%; left:22%;"><span>象</span></span>
+				<span class="chess red" node-type="red" data-type="noble" style="top:92%; left:32%;"><span>仕</span></span>
+				<span class="chess red boss" node-type="red" data-type="general" style="top:92%; left:42%;"><span>將</span></span>
+				<span class="chess red" node-type="red" data-type="noble" style="top:92%; left:52%;"><span>仕</span></span>
+				<span class="chess red" node-type="red" data-type="elephant" style="top:92%; left:62%;"><span>象</span></span>
+				<span class="chess red" node-type="red" data-type="horse" style="top:92%; left:72%;"><span>馬</span></span>
+				<span class="chess red" node-type="red" data-type="car" style="top:92%; left:82%;"><span>車</span></span>
+			</div>
+		</div>
+	</div>
+	<script type="text/javascript" src="js/STK.js"></script>
+	<script type="text/javascript" src="js/chess/init.js"></script>
+	<script type="text/javascript" src="js/ai/chessAI.js"></script>
+	<script type="text/javascript">
+	STK.chess.init(document.getElementById("dish"));
+	STK.ai.chessai({
+		'aiIs':'blue',
+		'deep':1
+	});
+	</script>
+</body>
